@@ -33,15 +33,12 @@ import { RequestDemoModule } from './modules/request-demo/request-demo.module';
     LoggerModule,
     DatabaseModule,
     AuthModule,
-    UserModule,FeatureModule,
-FaqModule,
-RequestDemoModule,
+    UserModule,
+    FeatureModule,
+    FaqModule,
+    RequestDemoModule,
   ],
   controllers: [AppController],
-  providers: [
-    AppService,
-    { provide: APP_GUARD, useClass: ThrottlerGuard },
-  ],
+  providers: [AppService, { provide: APP_GUARD, useClass: ThrottlerGuard }],
 })
-
 export class AppModule {}
