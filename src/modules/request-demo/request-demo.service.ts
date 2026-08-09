@@ -15,6 +15,10 @@ export class RequestDemoService {
     const demo = await this.requestDemoModel.create(dto);
     return { message: 'Demo request submitted successfully', data: demo };
   }
+  async count() {
+  const total = await this.requestDemoModel.countDocuments();
+  return { message: 'Total demo requests count fetched successfully', data: { total } };
+}
 
   async findAll(query: GetRequestDemosQueryDto) {
     const page = Number(query.page || 1);
