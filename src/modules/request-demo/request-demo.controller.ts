@@ -25,6 +25,13 @@ export class RequestDemoController {
     return this.requestDemoService.findAll(query);
   }
 
+  @Get('count')
+@UseGuards(RolesGuard)
+@Roles(RoleType.ADMIN)
+count() {
+  return this.requestDemoService.count();
+}
+
   @Get(':id')
   @UseGuards(RolesGuard)
   @Roles(RoleType.ADMIN)
