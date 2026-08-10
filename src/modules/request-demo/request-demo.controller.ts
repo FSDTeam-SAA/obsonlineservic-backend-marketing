@@ -1,6 +1,18 @@
-import { Controller, Get, Post, Delete, Body, Param, Query, UseGuards } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Delete,
+  Body,
+  Param,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
 import { RequestDemoService } from './request-demo.service';
-import { CreateRequestDemoDto, GetRequestDemosQueryDto } from './dto/request-demo.dto';
+import {
+  CreateRequestDemoDto,
+  GetRequestDemosQueryDto,
+} from './dto/request-demo.dto';
 import { JwtAuthGuard } from '../../common/guards/jwt-auth.guard';
 import { RolesGuard } from '../../common/guards/roles.guard';
 import { Roles } from '../../common/decorators/roles.decorator';
@@ -26,11 +38,11 @@ export class RequestDemoController {
   }
 
   @Get('count')
-@UseGuards(RolesGuard)
-@Roles(RoleType.ADMIN)
-count() {
-  return this.requestDemoService.count();
-}
+  @UseGuards(RolesGuard)
+  @Roles(RoleType.ADMIN)
+  count() {
+    return this.requestDemoService.count();
+  }
 
   @Get(':id')
   @UseGuards(RolesGuard)
