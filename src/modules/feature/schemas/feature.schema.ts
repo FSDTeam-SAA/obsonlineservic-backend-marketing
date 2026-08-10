@@ -3,6 +3,10 @@ import { HydratedDocument } from 'mongoose';
 
 @Schema({ timestamps: true })
 export class Feature {
+
+  @Prop({ required: true, trim: true })
+  featureName: string;
+
   @Prop({ required: true, trim: true })
   title: string;
 

@@ -16,6 +16,10 @@ const parseFeatures = ({ value }: { value: any }) => {
 
 export class CreateFeatureDto {
   @IsString()
+@IsNotEmpty()
+featureName: string;
+
+  @IsString()
   @IsNotEmpty()
   title: string;
 
@@ -30,6 +34,7 @@ export class CreateFeatureDto {
 }
 
 export class UpdateFeatureDto {
+  @IsOptional() @IsString() featureName?: string;
   @IsOptional() @IsString() title?: string;
   @IsOptional() @IsString() bodyText?: string;
 
