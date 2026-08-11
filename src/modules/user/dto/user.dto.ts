@@ -4,6 +4,7 @@ import {
   IsDateString,
   IsEnum,
   IsBoolean,
+  IsObject,
 } from 'class-validator';
 import { Transform } from 'class-transformer';
 
@@ -20,6 +21,24 @@ export class UpdateUserDto {
   @IsOptional() @IsString() roadArea?: string;
   @IsOptional() @IsString() postalCode?: string;
   @IsOptional() @IsString() taxId?: string;
+
+  @IsOptional()
+  @Transform(({ value }) => {
+    if (typeof value !== 'string') return value;
+    try {
+      return JSON.parse(value);
+    } catch {
+      return value;
+    }
+  })
+  @IsObject()
+  address?: Record<string, string>;
+
+  @IsOptional() @IsString() 'address.country'?: string;
+  @IsOptional() @IsString() 'address.cityState'?: string;
+  @IsOptional() @IsString() 'address.roadArea'?: string;
+  @IsOptional() @IsString() 'address.postalCode'?: string;
+  @IsOptional() @IsString() 'address.taxId'?: string;
 }
 
 export class GetUsersQueryDto {

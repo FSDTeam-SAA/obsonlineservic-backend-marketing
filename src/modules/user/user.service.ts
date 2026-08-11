@@ -9,6 +9,7 @@ import { CloudinaryService } from '../../infrastructure/cloudinary/cloudinary.se
 import { USER_LIST_FIELDS } from '../../core/constants';
 
 const SELECT_FIELDS = USER_LIST_FIELDS;
+const ADDRESS_FIELDS = ['country', 'cityState', 'roadArea', 'postalCode', 'taxId'] as const;
 
 
 @Injectable()
@@ -72,9 +73,32 @@ export class UserService {
   }
 
 
+  private buildUserUpdate(dto: UpdateUserDto) {
+    const update: Record<string, any> = {};
+    const body = dto as Record<string, any>;
+
+    for (const [key, value] of Object.entries(body)) {
+      if (value === undefined || value === null) continue;
+      if (ADDRESS_FIELDS.includes(key as any) || key === 'address' || key.startsWith('address.')) {
+        continue;
+      }
+      update[key] = value;
+    }
+
+    for (const field of ADDRESS_FIELDS) {
+      const value = body[field] ?? body[`address.${field}`] ?? body.address?.[field];
+      if (value !== undefined && value !== null) {
+        update[`address.${field}`] = value;
+      }
+    }
+
+    return update;
+  }
+
   async updateUser(userId: string | Types.ObjectId, dto: UpdateUserDto) {
+    const update = this.buildUserUpdate(dto);
     const updated = await this.userModel
-      .findByIdAndUpdate(userId, dto, { new: true, runValidators: true })
+      .findByIdAndUpdate(userId, { $set: update }, { new: true, runValidators: true })
       .select(SELECT_FIELDS);
     if (!updated) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     return { message: 'User profile updated successfully', data: updated };
@@ -286,8 +310,9 @@ export class UserService {
 
 
   async adminUpdateUser(id: string, dto: AdminUpdateUserDto) {
+    const update = this.buildUserUpdate(dto);
     const updated = await this.userModel
-      .findByIdAndUpdate(id, dto, { new: true, runValidators: true })
+      .findByIdAndUpdate(id, { $set: update }, { new: true, runValidators: true })
       .select(SELECT_FIELDS);
     if (!updated) throw new HttpException('User not found', HttpStatus.NOT_FOUND);
     return { message: 'User updated successfully', data: updated };
