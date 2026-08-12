@@ -37,8 +37,12 @@ async function bootstrap() {
   app.useGlobalInterceptors(new ResponseInterceptor());
 
   const port = configService.get<number>('app.port', 5000);
-  await app.listen(port);
-  logger.log(`Server running → http://localhost:${port}/api/v1`);
+
+  // Bind explicitly to 0.0.0.0 so the server accepts external connections,
+  // not just requests from localhost inside the VPS.
+  await app.listen(port, '0.0.0.0');
+
+  logger.log(`Server running → http://0.0.0.0:${port}/api/v1`);
 }
 
 bootstrap();
