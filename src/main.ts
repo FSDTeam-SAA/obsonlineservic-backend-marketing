@@ -20,10 +20,7 @@ async function bootstrap() {
   app.setGlobalPrefix('api/v1');
 
   app.enableCors({
-    origin: [
-      configService.get<string>('app.frontendUrl'),
-      configService.get<string>('app.adminUrl'),
-    ],
+    origin: '*',
     credentials: true,
   });
 
